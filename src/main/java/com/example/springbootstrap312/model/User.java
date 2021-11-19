@@ -20,10 +20,10 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @Column
+    @Column(name = "firstname")
     private String firstName;
 
-    @Column
+    @Column(name = "lastname")
     private String lastName;
 
     @Column
