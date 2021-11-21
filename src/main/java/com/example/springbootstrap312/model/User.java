@@ -147,6 +147,15 @@ public class User implements UserDetails {
         return true;
     }
 
+    public String rolesToString() {
+        Set<Role> rolesSet = getRoles();
+        StringBuilder roles = new StringBuilder();
+        for (Role role : rolesSet) {
+            roles.append(role.getRole().replace("ROLE_", "")).append(" ");
+        }
+        return roles.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

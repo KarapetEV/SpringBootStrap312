@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import javax.sql.DataSource;
@@ -40,20 +41,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/login").anonymous()
-                .antMatchers("/user/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .and()
                 .formLogin()
-                .successHandler(loginSuccessHandler)
-                .permitAll()
-                .and()
+                    .loginPage("/login")
+                    .successHandler(loginSuccessHandler)
+                    .loginProcessingUrl("/login")
+                    .usernameParameter("j_email")
+                    .passwordParameter("j_password");
+
+        http
                 .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .and().csrf().disable();
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .clearAuthentication(true)
+                    .deleteCookies()
+                    .logoutSuccessUrl("/login?logout");
+
+        http
+                .authorizeRequests()
+                    .antMatchers("/login").anonymous()
+                    .antMatchers("/user/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+                    .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                    .anyRequest().authenticated();
     }
 
     @Bean
