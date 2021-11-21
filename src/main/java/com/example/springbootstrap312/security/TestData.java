@@ -55,6 +55,5 @@ public class TestData {
         tom.setEmail("tom32@test.com");
         tom.setRoles(roles2);
         userService.addUser(tom);
-        System.out.println("Test data created!");
     }
 }

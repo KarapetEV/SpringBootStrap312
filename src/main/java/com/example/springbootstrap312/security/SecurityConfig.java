@@ -2,6 +2,7 @@ package com.example.springbootstrap312.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,9 +14,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -44,22 +47,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .loginPage("/login")
                     .successHandler(loginSuccessHandler)
-                    .loginProcessingUrl("/login")
+                    //.loginProcessingUrl("/login")
                     .usernameParameter("j_email")
-                    .passwordParameter("j_password");
+                    .passwordParameter("j_password")
+                    .permitAll();
 
         http
                 .logout()
+                    .permitAll()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .clearAuthentication(true)
-                    .deleteCookies()
-                    .logoutSuccessUrl("/login?logout");
+                    .deleteCookies("JSESSIONID")
+                    .logoutSuccessUrl("/")
+                    .and().csrf().disable();
 
         http
                 .authorizeRequests()
                     .antMatchers("/login").anonymous()
                     .antMatchers("/user/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
                     .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                    //.antMatchers("/").permitAll()
                     .anyRequest().authenticated();
     }
 

@@ -2,7 +2,7 @@ html {
     background-color: rgb(248, 249, 250);
 }
 
-.container {
+.container-fluid {
     margin: 100px auto;
 }
 
@@ -17,7 +17,7 @@ html {
     height: 40px;
     border-radius: 5px;
     border: none;
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: center;
     font-size: 18px;
