@@ -1,11 +1,14 @@
 package com.example.springbootstrap312.dao;
 
+import com.example.springbootstrap312.model.Role;
 import com.example.springbootstrap312.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -15,12 +18,13 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> getAllUsers() {
-        return entityManager.createQuery("from User", User.class).getResultList();
+        return entityManager.createQuery("from User", User.class).getResultList().stream()
+                .sorted(Comparator.comparing(User::getFirstName)).collect(Collectors.toList());
     }
 
     @Override
     public User getUser(long id) {
-        return (User) entityManager.createQuery("from User u JOIN fetch u.roles where u.id=:id")
+        return (User) entityManager.createQuery("select u from User u JOIN fetch u.roles where u.id=:id")
                 .setParameter("id", id).getSingleResult();
     }
 

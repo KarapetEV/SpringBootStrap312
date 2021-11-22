@@ -6,9 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @Repository
@@ -19,7 +21,8 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public List<Role> getAllRoles() {
-        return entityManager.createQuery("from Role", Role.class).getResultList();
+        return entityManager.createQuery("from Role", Role.class).getResultList().stream()
+                .sorted(Comparator.comparing(Role::getRole)).collect(Collectors.toList());
     }
 
     @Override
