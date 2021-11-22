@@ -34,3 +34,11 @@ html {
 .my_header {
     background-color: #343a40;
 }
+
+.nav-link {
+    color: #8c9da0;
+}
+
+.btn_logout:hover {
+    color: #ffffff;
+}
