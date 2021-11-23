@@ -1,9 +1,0 @@
-<div th:fragment="header" class="p-3 bg-dark text-white">
-    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li><b><p th:text="${user.getEmail()}"></p> </b></li>
-        <li>with roles: <p th:text="${user.getAuthorities()}"></p> </li>
-    </ul>
-    <div class="logout_link">
-        <a th:href="@{/logout}" type="button" class="btn btn-outline-secondary">Logout</a>
-    </div>
-</div>

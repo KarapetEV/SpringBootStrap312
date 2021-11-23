@@ -4,10 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -148,7 +145,8 @@ public class User implements UserDetails {
     }
 
     public String rolesToString() {
-        Set<Role> rolesSet = getRoles();
+        Set<Role> rolesSet = new TreeSet<Role>(Comparator.comparing(Role::getRole));
+        rolesSet.addAll(getRoles());
         StringBuilder roles = new StringBuilder();
         for (Role role : rolesSet) {
             roles.append(role.getRole().replace("ROLE_", "")).append(" ");
