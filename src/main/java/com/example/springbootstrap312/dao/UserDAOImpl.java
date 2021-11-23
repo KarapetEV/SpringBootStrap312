@@ -1,6 +1,5 @@
 package com.example.springbootstrap312.dao;
 
-import com.example.springbootstrap312.model.Role;
 import com.example.springbootstrap312.model.User;
 import org.springframework.stereotype.Repository;
 
